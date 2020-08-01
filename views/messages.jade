@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    each thread, tid in conversations
+        each recipient in thread.recipients
+            div(class="user")
+                div(class="userIcon fa fa-user")
+                div(class="userName") #{recipient}
+        div(class="chat")
+            each msgroup in thread.messageGroups
+                if msgroup.sender == 5038236773
+                    div(class="mine messages")
+                        each msg in msgroup.messages
+                            if msg.last == true
+                                div(class="message last") #{msg.body}
+                            else
+                                div(class="message") #{msg.body}
+                else
+                    div(class="yours messages")
+                        each msg in msgroup.messages
+                            if msg.last == true
+                                div(class="message last") #{msg.body}
+                            else
+                                div(class="message") #{msg.body}

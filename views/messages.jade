@@ -3,9 +3,9 @@ extends layout
 block content
     each thread, tid in conversations
         each recipient in thread.recipients
-            div(class="user")
+            div(class="user #{recipient.number}", onclick="promptContactName(#{recipient.number})")
                 div(class="userIcon fa fa-user")
-                div(class="userName") #{recipient}
+                div(class="userName") #{recipient.display}
         div(class="chat")
             each msgroup in thread.messageGroups
                 if msgroup.sender == 5038236773

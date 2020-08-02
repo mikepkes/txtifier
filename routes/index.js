@@ -1,6 +1,11 @@
 var express = require('express'); var router = express.Router();
 var xlsx = require('node-xlsx').default;
 
+const storage = require('node-persist');
+storage.init().then(() => {
+    storage.setItem("5038236773", "Ted Wheeler")
+});
+
 let formatPhoneNumber = (str) => {
   //Filter only numbers from the input
   let cleaned = ('' + str).replace(/\D/g, '');
@@ -18,6 +23,17 @@ let formatPhoneNumber = (str) => {
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+});
+
+router.post('/update_contact', function(req, res) {
+    allSets = []
+    for (var key in req.body) {
+        allSets.push(storage.setItem(key.toString(), req.body[key]))
+    }
+    Promise.all(allSets).then((values) => {
+        res.send("Updated")
+        console.log("Updated Contact.")
+    });
 });
 
 router.post('/upload', function(req, res) {
@@ -41,6 +57,8 @@ router.post('/upload', function(req, res) {
   });
       */
 
+    async function buildPage() {
+
     var conversations = {};
 
     name = workSheets[0]['name'];
@@ -52,12 +70,36 @@ router.post('/upload', function(req, res) {
     var recipientsColumn = headers.indexOf("Recipients");
     var bodyColumn = headers.indexOf("Body");
     for(i=1; i < data.length; i++) {
-        var recipients = (data[i][recipientsColumn]).toString().split(/, /);
+
+        // Add both sender and receiver(s) to the contacts for this thread.
+        var recipientNumbers = (data[i][recipientsColumn]).toString().split(/, /);
+        recipientNumbers.push((data[i][senderColumn]).toString().replace(/\s/g, ''));
+
+        var recipients = [];
+        for (r=0; r<recipientNumbers.length; r++) {
+            display = "";
+            await storage.getItem(recipientNumbers[r]).then(function (result) {
+              if (result == null) {
+                  display = formatPhoneNumber(recipientNumbers[r]);
+                  if (display == null) {
+                      display = recipientNumbers[r]
+                  }
+              }
+              else {
+                  display = result;
+              }
+
+            });
+            recipients.push({
+                'display' : display,
+                'number'  : recipientNumbers[r]
+            });
+        }
         var tid = data[i][threadIdColumn]
-        var sender = data[i][senderColumn];
+        var sender = data[i][senderColumn].toString().replace(/\s/g, '');
         if (!(tid in conversations)) {
             conversations[tid] = {
-                'recipients' : recipients.map(formatPhoneNumber),
+                'recipients' : recipients,
                 'messageGroups' : [
                 {
                     'sender' : sender, 
@@ -92,7 +134,10 @@ router.post('/upload', function(req, res) {
         
     }
 
-    res.render('messages', {conversations:conversations});
+        res.render('messages', {conversations:conversations});
+    }
+    buildPage();
+
 });
 
 module.exports = router;

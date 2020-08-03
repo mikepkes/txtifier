@@ -10,6 +10,18 @@ var usersRouter = require('./routes/users');
 
 
 var app = express();
+var session = require('express-session');
+
+
+var sess = {
+  secret: 'fooBar',
+  cookie: {},
+  resave: false,
+  saveUninitialized: false
+}
+
+app.use(session(sess))
+
 
 app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
@@ -45,27 +57,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-app.post('/upload', function(req, res) {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let sampleFile = req.files.sampleFile;
-
-  return res.status(400).send("YoDawg!");
-
-    /*
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('/somewhere/on/your/server/filename.jpg', function(err) {
-    if (err)
-      return res.status(500).send(err);
-
-    res.send('File uploaded!');
-  });
-      */
 });
 
 module.exports = app;

@@ -1,7 +1,7 @@
-var express = require('express'); var router = express.Router();
+var express = require('express');
+var router = express.Router();
 var xlsx = require('node-xlsx').default;
 var md5 = require('md5');
-
 
 var minuteSplit = 5;
 
@@ -89,7 +89,10 @@ router.post('/upload', function(req, res) {
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   let sampleFile = req.files.sampleFile;
 
-
+  if (req.session.lastUploaded) {
+      console.log("Prior Uploaded File: " + req.session.lastUploaded)
+  }
+  req.session.lastUploaded = sampleFile.tempFilePath
 
   const workSheets = xlsx.parse(sampleFile.tempFilePath, { cellDates: true });
     /*

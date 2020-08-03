@@ -23,4 +23,4 @@ block content
                         div(class="message #{msg.list ? 'last' : ''} tooltip") #{msg.body}
                             span(class="tooltiptext") #{msg.datetime}
                     div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip", data-user-abbr="#{msgroup.userabbr}") #{msgroup.userabbr}
-                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.phoneformat}
+                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{msgroup.phoneformat}

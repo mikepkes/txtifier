@@ -1,5 +1,17 @@
 const Http = new XMLHttpRequest();
 
+var userAbbreviation = function(name) {
+    if (name.match(/^[()0-9\s\-]{4,}/)) {
+        return name.slice(-2);
+    }
+    if (name.indexOf(' ') >= 0) {
+        var initials = name.match(/\b\w/g) || [];
+        initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+        return initials;
+    }
+    return name;
+}
+
 var promptContactName = function(number) {
     var person = prompt("Contact Name for " + number, "");
     if (person != null) {
@@ -12,9 +24,13 @@ var promptContactName = function(number) {
         }
 
         var es = document.getElementsByClassName(number);
-        for (e in es) {
-            es[e].childNodes[1].textContent = person
-            console.log(e);
+        for (var i=0, len=es.length|0; i<len; i=i+1|0) {
+            es[i].childNodes[1].textContent = person
+        }
+
+        var as = document.getElementsByClassName("msggroup_" + number);
+        for (var i=0, len=as.length|0; i<len; i=i+1|0) {
+            as[i].setAttribute("data-user-abbr", userAbbreviation(person));
         }
     }
 

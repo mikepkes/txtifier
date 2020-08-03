@@ -2,23 +2,19 @@ extends layout
 
 block content
     each thread, tid in conversations
-        each recipient in thread.recipients
-            div(class="user #{recipient.number}", onclick="promptContactName(#{recipient.number})")
-                div(class="userIcon fa fa-user")
-                div(class="userName") #{recipient.display}
+        div(class=userBox)
+            each recipient in thread.recipients
+                div(class="user #{recipient.number} tooltip", onclick="promptContactName(#{recipient.number})")
+                    div(class="userIcon fa fa-user")
+                    div(class="userName") #{recipient.display}
+                    span(class="tooltiptext tooltip_user_#{recipient.number}") #{recipient.formattedPhoneNumber}
         div(class="chat")
             each msgroup in thread.messageGroups
-                if msgroup.sender == 5038236773
-                    div(class="mine messages")
-                        each msg in msgroup.messages
-                            if msg.last == true
-                                div(class="message last") #{msg.body}
-                            else
-                                div(class="message") #{msg.body}
-                else
-                    div(class="yours messages")
-                        each msg in msgroup.messages
-                            if msg.last == true
-                                div(class="message last") #{msg.body}
-                            else
-                                div(class="message") #{msg.body}
+                if msgroup.showtime == true
+                    div(class="datetime", data-datetime="#{msgroup.datetime}") #{msgroup.datetime}
+                div(class="#{msgroup.sender==you ? 'mine' : 'yours'} messages", data-datetime="#{msgroup.datetime}")
+                    each msg in msgroup.messages
+                        div(class="message #{msg.list ? 'last' : ''} tooltip") #{msg.body}
+                            span(class="tooltiptext") #{msg.datetime}
+                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip", data-user-abbr="#{msgroup.userabbr}") #{msgroup.userabbr}
+                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.phoneformat}

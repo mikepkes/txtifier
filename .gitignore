@@ -8,6 +8,7 @@ lerna-debug.log*
 
 # Swap Files
 *.swp
+*.swo
 
 # Local Storage
 .node-persist

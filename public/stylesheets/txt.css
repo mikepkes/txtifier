@@ -185,7 +185,7 @@ body {
 .tooltip .tooltiptext {
   font-size:x-small;
   visibility: hidden;
-  width: 120px;
+  width: 180px;
   background-color: black;
   line-height: 12px;
   color: #fff;

@@ -38,9 +38,11 @@ var promptContactName = function(number) {
             es[i].childNodes[1].textContent = person
         }
 
-        var as = document.getElementsByClassName("msggroup_" + number);
+        var as = document.getElementsByClassName("bubble_" + number);
         for (var i=0, len=as.length|0; i<len; i=i+1|0) {
-            as[i].setAttribute("data-user-abbr", userAbbreviation(person));
+            var abr = userAbbreviation(person);
+            as[i].setAttribute("data-user-abbr", abr);
+            as[i].textContent = abr;
         }
     }
 

@@ -22,5 +22,5 @@ block content
                     each msg in msgroup.messages
                         div(class="message #{msg.list ? 'last' : ''} tooltip") #{msg.body}
                             span(class="tooltiptext") #{msg.datetime}
-                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip", data-user-abbr="#{msgroup.userabbr}") #{msgroup.userabbr}
+                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{msgroup.userabbr}") #{msgroup.userabbr}
                         span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{msgroup.phoneformat}

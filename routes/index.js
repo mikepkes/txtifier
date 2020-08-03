@@ -230,12 +230,15 @@ router.post('/upload', function(req, res) {
         
     }
 
-        res.render('messages', {
+        return {
             conversations:conversations,
             you:'5038236773'
-        });
+        };
     }
-    buildPage();
+    async function renderPage(response) {
+        response.render('messages', await buildPage());
+    }
+    renderPage(res);
 
 });
 

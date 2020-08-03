@@ -1,5 +1,15 @@
 const Http = new XMLHttpRequest();
 
+/* Set the width of the side navigation to 250px */
+var openNav = function() {
+  document.getElementById("navigator").style.width = "250px";
+}
+
+/* Set the width of the side navigation to 0 */
+var closeNav = function() {
+  document.getElementById("navigator").style.width = "0";
+} 
+
 var userAbbreviation = function(name) {
     if (name.match(/^[()0-9\s\-]{4,}/)) {
         return name.slice(-2);

@@ -1,8 +1,14 @@
 extends layout
 
 block content
+    button(onclick="javascript:openNav();") open navigation
+    div(class="sidenav", id="navigator")
+        button(onclick="javascript:closeNav();") close
+        each thread, tid in conversations
+            div
+                a(href="#thread_#{tid}") #{tid}
     each thread, tid in conversations
-        div(class=userBox)
+        div(class=userBox id="thread_#{tid}")
             each recipient in thread.recipients
                 div(class="user #{recipient.number} tooltip", onclick="promptContactName(#{recipient.number})")
                     div(class="userIcon fa fa-user")

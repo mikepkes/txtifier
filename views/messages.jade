@@ -1,5 +1,6 @@
 extends layout
 
+
 block content
     button(onclick="javascript:openNav();") open navigation
     div(class="sidenav", id="navigator")
@@ -12,8 +13,8 @@ block content
             each recipient in thread.recipients
                 div(class="user #{recipient.number} tooltip", onclick="promptContactName(#{recipient.number})")
                     div(class="userIcon fa fa-user")
-                    div(class="userName") #{recipient.display}
-                    span(class="tooltiptext tooltip_user_#{recipient.number}") #{recipient.formattedPhoneNumber}
+                    div(class="userName") #{contacts[recipient.number]}
+                    span(class="tooltiptext tooltip_user_#{recipient.number}") #{helpers.formatPhoneNumber(recipient.number)}
         div(class="chat")
             each msgroup in thread.messageGroups
                 if msgroup.showtime == true
@@ -22,5 +23,5 @@ block content
                     each msg in msgroup.messages
                         div(class="message #{msg.last ? 'last' : ''} tooltip") #{msg.body}
                             span(class="tooltiptext") #{msg.datetime}
-                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{msgroup.userabbr}") #{msgroup.userabbr}
-                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{msgroup.phoneformat}
+                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}
+                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{helpers.formatPhoneNumber(msgroup.sender)}

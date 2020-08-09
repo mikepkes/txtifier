@@ -19,6 +19,9 @@ storage.init().then(() => {
     storage.setItem("5038236773", "Ted Wheeler")
 });
 
+const messageStorage = require('node-persist');
+messageStorage.init();
+
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
 }
@@ -81,6 +84,24 @@ router.post('/update_contact', function(req, res) {
     });
 });
 
+router.get('/conversation/:id', function(req, res) {
+    async function buildPage() {
+        return await messageStorage.getItem(req.params.id)
+    }
+
+    async function renderPage(response) {
+        var pageData = await buildPage();
+
+        pageData['data']['helpers'] = {
+                "formatPhoneNumber" : formatPhoneNumber,
+                "userAbbreviation" : userAbbreviation,
+            },
+        response.render('messages', pageData['data']);
+    }
+
+    renderPage(res);
+});
+
 router.post('/upload', function(req, res) {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
@@ -92,7 +113,7 @@ router.post('/upload', function(req, res) {
   if (req.session.lastUploaded) {
       console.log("Prior Uploaded File: " + req.session.lastUploaded)
   }
-  req.session.lastUploaded = sampleFile.tempFilePath
+  req.session.lastUploaded = sampleFile.tempFilePath;
 
   const workSheets = xlsx.parse(sampleFile.tempFilePath, { cellDates: true });
     /*
@@ -221,6 +242,7 @@ router.post('/upload', function(req, res) {
             conversations[tid]['messageGroups'][lastConv]['messages'][msgCount-1]['last'] = false;
         }
         conversations[tid]['messageGroups'][lastConv]['messages'].push({
+            'name' : sampleFile['name'],
             'sender' : data[i][senderColumn],
             'date'   : date,
             'datetime' : formatDate(date),
@@ -228,16 +250,41 @@ router.post('/upload', function(req, res) {
             'last'   : true
         });
         
-    }
+        }
+
+        // There's probably a way to output all the contents of the contacts, but :shrug:
+        var contactKeys = await storage.keys();
+        var contacts = {}
+        for (var i = 0; i < contactKeys.length; i++) {
+            contacts[contactKeys[i]] = await storage.getItem(contactKeys[i])
+        }
 
         return {
             conversations:conversations,
+            contacts:contacts,
+            helpers: {
+                "formatPhoneNumber" : formatPhoneNumber,
+                "userAbbreviation" : userAbbreviation,
+            },
             you:'5038236773'
         };
     }
     async function renderPage(response) {
-        response.render('messages', await buildPage());
+        var pageData = await buildPage();
+
+        messageStorage.setItem(sampleFile["md5"],
+            {
+                "name" : sampleFile['name'],
+                "data" : pageData
+            });
+
+        response.redirect("/conversation/" + sampleFile["md5"]);
     }
+
+    
+
+
+
     renderPage(res);
 
 });

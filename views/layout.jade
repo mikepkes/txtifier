@@ -2,10 +2,13 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/txt.css')
+    style(type="text/css")
+        include ../public/stylesheets/style.css
+    style(type="text/css")
+        include ../public/stylesheets/txt.css
+    script(type="text/javascript")
+        include ../public/javascripts/contacts.js
     script(src="https://kit.fontawesome.com/4277cd205a.js" crossorigin="anonymous")
-    script(src='/javascripts/contacts.js', type='text/javascript')
 
   body
 

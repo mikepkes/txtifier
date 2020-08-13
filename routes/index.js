@@ -134,6 +134,7 @@ router.post('/upload', function(req, res) {
     data = workSheets[0]['data'];
     headers = data[0];
     var threadIdColumn = headers.indexOf("ThreadId");
+    var messageIdColumn = headers.indexOf("MessageId");
     var dateColumn = headers.indexOf("Date (UTC)");
     var senderColumn = headers.indexOf("Sender");
     var recipientsColumn = headers.indexOf("Recipients");
@@ -241,13 +242,15 @@ router.post('/upload', function(req, res) {
         if (msgCount > 0) {
             conversations[tid]['messageGroups'][lastConv]['messages'][msgCount-1]['last'] = false;
         }
+
         conversations[tid]['messageGroups'][lastConv]['messages'].push({
             'name' : sampleFile['name'],
             'sender' : data[i][senderColumn],
             'date'   : date,
             'datetime' : formatDate(date),
             'body'   : body,
-            'last'   : true
+            'last'   : true,
+            'id'     : data[i][messageIdColumn]
         });
         
         }
@@ -278,6 +281,7 @@ router.post('/upload', function(req, res) {
                 "data" : pageData
             });
 
+        var html = 
         response.redirect("/conversation/" + sampleFile["md5"]);
     }
 

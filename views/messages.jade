@@ -13,7 +13,7 @@ block content
             each recipient in thread.recipients
                 div(class="user #{recipient.number} tooltip", onclick="promptContactName(#{recipient.number})")
                     div(class="userIcon fa fa-user")
-                    div(class="userName") #{contacts[recipient.number]}
+                    div(class="userName") #{contacts[recipient.number] ? contacts[recipient.number] : helpers.formatPhoneNumber(recipient.number)}
                     span(class="tooltiptext tooltip_user_#{recipient.number}") #{helpers.formatPhoneNumber(recipient.number)}
         div(class="chat")
             each msgroup in thread.messageGroups

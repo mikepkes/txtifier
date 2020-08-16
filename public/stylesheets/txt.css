@@ -93,7 +93,7 @@ body {
 }
 
 .mine.bubble {
-  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background: #0085D1;
   background-attachment: fixed;
   left: 70px;
   color: White;
@@ -148,7 +148,7 @@ body {
 .mine .message {
   color: white;
   margin-left: 25%;
-  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background: #0085D1;
   background-attachment: fixed;
   position: relative;
 }
@@ -161,7 +161,7 @@ body {
   right: -8px;
   height: 20px;
   width: 20px;
-  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background: #0085D1;
   background-attachment: fixed;
   border-bottom-left-radius: 15px;
 }

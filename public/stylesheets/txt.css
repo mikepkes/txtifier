@@ -153,6 +153,10 @@ body {
   position: relative;
 }
 
+.message p {
+    margin:0px;
+}
+
 .mine .message.last:before {
   content: "";
   position: absolute;

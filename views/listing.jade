@@ -1,0 +1,9 @@
+extends layout
+
+
+block content
+    h1 Requests
+    each cid in conversations
+        div
+            a(href="/conversation/#{cid}") #{cid}
+

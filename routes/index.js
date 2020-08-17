@@ -73,7 +73,26 @@ let formatPhoneNumber = (str) => {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-res.sendStatus(404);
+    async function buildConversations() {
+        cids = []
+
+
+        // There's probably a way to output all the contents of the contacts, but :shrug:
+        var conversationKeys = await storage.keys();
+        for (var i = 0; i < conversationKeys.length; i++) {
+            var item = await storage.getItem(conversationKeys[i])
+            if (typeof item === 'string' || item instanceof String) {
+                1; // Pass?
+            }
+            else
+            {
+                cids.push(conversationKeys[i])
+            }
+        }
+
+        res.render('listing', { "conversations" : cids } )
+    }
+    buildConversations();
   //res.render('index', { title: 'Express' });
 });
 

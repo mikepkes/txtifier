@@ -73,10 +73,16 @@ let formatPhoneNumber = (str) => {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+res.sendStatus(404);
+  //res.render('index', { title: 'Express' });
 });
 
-router.post('/*/update_contact', function(req, res) {
+router.post('/conversation/update_contact', function(req, res) {
+
+res.sendStatus(404);
+    return;
+
+
     allSets = []
     for (var key in req.body) {
         allSets.push(storage.setItem(key.toString(), req.body[key]))
@@ -106,6 +112,8 @@ router.get('/conversation/:id', function(req, res) {
 });
 
 router.post('/upload', (req, res, next) => {
+res.sendStatus(404);
+  return;
   const form = formidable({ multiples: false });
  
   form.parse(req, (err, fields, files) => {

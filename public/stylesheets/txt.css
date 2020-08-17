@@ -201,6 +201,10 @@ body {
   margin-left: -60px;
 }
 
+.tooltip .tooltiptext a:link {
+  color: #bbb;
+}
+
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }

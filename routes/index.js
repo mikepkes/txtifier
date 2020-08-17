@@ -76,7 +76,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/update_contact', function(req, res) {
+router.post('/*/update_contact', function(req, res) {
     allSets = []
     for (var key in req.body) {
         allSets.push(storage.setItem(key.toString(), req.body[key]))

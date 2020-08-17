@@ -93,7 +93,12 @@ router.get('/', function(req, res, next) {
         res.render('listing', { "conversations" : cids } )
     }
     buildConversations();
-  //res.render('index', { title: 'Express' });
+});
+
+router.get('/add', function(req,res,next) {
+res.sendStatus(404);
+    return;
+  res.render('index', { title: 'Express' });
 });
 
 router.post('/conversation/update_contact', function(req, res) {
@@ -131,8 +136,6 @@ router.get('/conversation/:id', function(req, res) {
 });
 
 router.post('/upload', (req, res, next) => {
-res.sendStatus(404);
-  return;
   const form = formidable({ multiples: false });
  
   form.parse(req, (err, fields, files) => {
@@ -177,6 +180,7 @@ res.sendStatus(404);
     var senderColumn = headers.indexOf("Sender");
     var recipientsColumn = headers.indexOf("Recipients");
     var bodyColumn = headers.indexOf("Body");
+    var attachmentColumn = headers.indexOf("AttachmentCount");
     for(i=1; i < data.length; i++) {
 
         // Add both sender and receiver(s) to the contacts for this thread.
@@ -245,7 +249,7 @@ res.sendStatus(404);
                     'userabbr' : userabbr,
                     'phoneformat' : formatPhoneNumber(sender),
                     'senderName' : senderName,
-                    'showtime' : true
+                    'showtime' : true,
                 }
             ]};
         }
@@ -281,6 +285,19 @@ res.sendStatus(404);
             conversations[tid]['messageGroups'][lastConv]['messages'][msgCount-1]['last'] = false;
         }
 
+
+        console.log(attachmentColumn)
+        console.log(data[i])
+        var attachments = Array();
+        if (attachmentColumn > -1) {
+            var ac = parseInt(data[i][attachmentColumn]);
+
+            for(var m=0; m<ac; m++) {
+                // More data to come.
+                attachments.push({})
+            }
+        }
+
         conversations[tid]['messageGroups'][lastConv]['messages'].push({
             'name' : sampleFile['name'],
             'sender' : data[i][senderColumn],
@@ -288,7 +305,8 @@ res.sendStatus(404);
             'datetime' : formatDate(date),
             'body'   : body,
             'last'   : true,
-            'id'     : data[i][messageIdColumn]
+            'id'     : data[i][messageIdColumn],
+            'attachments' : attachments
         });
         
         }

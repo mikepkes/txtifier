@@ -21,7 +21,8 @@ block content
                     div(class="datetime", data-datetime="#{msgroup.datetime}") #{msgroup.datetime}
                 div(class="#{msgroup.sender==you ? 'mine' : 'yours'} messages", data-datetime="#{msgroup.datetime}")
                     each msg in msgroup.messages
-                        div(class="message #{msg.last ? 'last' : ''} tooltip", id="message_#{msg.id}") #{msg.body}
+                        div(class="message #{msg.last ? 'last' : ''} tooltip", id="message_#{msg.id}")
+                            p #{msg.body}
                             span(class="tooltiptext") #{msg.datetime} &nbsp;
                                 a(href="http://txtifier.com/conversation/#{md5}#message_#{msg.id}") [link]
                     div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}

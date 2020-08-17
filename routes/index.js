@@ -77,7 +77,7 @@ router.get('/', function(req, res, next) {
         cids = []
 
 
-        // There's probably a way to output all the contents of the contacts, but :shrug:
+        // There's probably a way to output all the contents of the conversations, but :shrug:
         var conversationKeys = await storage.keys();
         for (var i = 0; i < conversationKeys.length; i++) {
             var item = await storage.getItem(conversationKeys[i])
@@ -297,7 +297,10 @@ res.sendStatus(404);
         var contactKeys = await storage.keys();
         var contacts = {}
         for (var i = 0; i < contactKeys.length; i++) {
-            contacts[contactKeys[i]] = await storage.getItem(contactKeys[i])
+            var item = await storage.getItem(contactKeys[i])
+            if (typeof item === 'string' || item instanceof String) {
+                contacts[contactKeys[i]] = item
+            }
         }
 
         return {

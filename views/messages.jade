@@ -23,5 +23,6 @@ block content
                     each msg in msgroup.messages
                         div(class="message #{msg.last ? 'last' : ''} tooltip", id="message_#{msg.id}") #{msg.body}
                             span(class="tooltiptext") #{msg.datetime}
+                                a(href="http://txtifier.com/conversation/#{md5}#message_#{msg.id}") link
                     div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}
                         span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{helpers.formatPhoneNumber(msgroup.sender)}

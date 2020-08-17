@@ -286,11 +286,13 @@ router.post('/upload', (req, res, next) => {
     async function renderPage(response) {
         var pageData = await buildPage();
 
+
         const hash = md5File.sync(sampleFile.path);
+        pageData['md5'] = hash;
         messageStorage.setItem(hash,
             {
                 "name" : sampleFile['name'],
-                "data" : pageData
+                "data" : pageData,
             });
 
         response.redirect("/conversation/" + hash);

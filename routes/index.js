@@ -1,7 +1,10 @@
 var express = require('express');
+const formidable = require('formidable');
 var router = express.Router();
 var xlsx = require('node-xlsx').default;
 var md5 = require('md5');
+const md5File = require('md5-file')
+
 
 var minuteSplit = 5;
 
@@ -102,20 +105,28 @@ router.get('/conversation/:id', function(req, res) {
     renderPage(res);
 });
 
-router.post('/upload', function(req, res) {
-  if (!req.files || Object.keys(req.files).length === 0) {
+router.post('/upload', (req, res, next) => {
+  const form = formidable({ multiples: false });
+ 
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+
+  if (!files || Object.keys(files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
 
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let sampleFile = req.files.sampleFile;
+  let sampleFile = files.sampleFile;
 
   if (req.session.lastUploaded) {
       console.log("Prior Uploaded File: " + req.session.lastUploaded)
   }
-  req.session.lastUploaded = sampleFile.tempFilePath;
+  req.session.lastUploaded = sampleFile.path;
 
-  const workSheets = xlsx.parse(sampleFile.tempFilePath, { cellDates: true });
+  const workSheets = xlsx.parse(sampleFile.path, { cellDates: true });
     /*
   // Use the mv() method to place the file somewhere on your server
   sampleFile.mv('/somewhere/on/your/server/filename.jpg', function(err) {
@@ -275,14 +286,14 @@ router.post('/upload', function(req, res) {
     async function renderPage(response) {
         var pageData = await buildPage();
 
-        messageStorage.setItem(sampleFile["md5"],
+        const hash = md5File.sync(sampleFile.path);
+        messageStorage.setItem(hash,
             {
                 "name" : sampleFile['name'],
                 "data" : pageData
             });
 
-        var html = 
-        response.redirect("/conversation/" + sampleFile["md5"]);
+        response.redirect("/conversation/" + hash);
     }
 
     
@@ -290,6 +301,8 @@ router.post('/upload', function(req, res) {
 
 
     renderPage(res);
+    });
+
 
 });
 

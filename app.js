@@ -1,9 +1,9 @@
 var createError = require('http-errors');
 var express = require('express');
-const fileUpload = require('express-fileupload')
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,12 +23,14 @@ var sess = {
 app.use(session(sess))
 
 
+/*
 app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
   useTempFiles : true,
   tempFileDir : '/tmp/',
   debug : true
 }));
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -86,7 +86,6 @@ router.get('/', function(req, res, next) {
             }
             else
             {
-                console.log(item)
                 convos.push({"id" : conversationKeys[i], "name": item['name']})
             }
         }
@@ -287,8 +286,6 @@ router.post('/upload', (req, res, next) => {
         }
 
 
-        console.log(attachmentColumn)
-        console.log(data[i])
         var attachments = Array();
         if (attachmentColumn > -1) {
             var ac = parseInt(data[i][attachmentColumn]);

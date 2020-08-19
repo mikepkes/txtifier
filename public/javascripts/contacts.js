@@ -1,4 +1,22 @@
+//import { createPopper } from '@popperjs/core';
 const Http = new XMLHttpRequest();
+
+
+let setMe = function(me) {
+    console.log(me);
+    var mes = document.getElementsByClassName("mine");
+    while (mes.length|0) {
+        mes[0].classList.add("yours")
+        mes[0].classList.remove("mine")
+    }
+
+    var newMes = document.getElementsByClassName("contact_" + me);
+    var len=newMes.length|0;
+    for (var i=0; i<len; i=i+1) {
+        newMes[i].classList.remove("yours")
+        newMes[i].classList.add("mine")
+    }
+}
 
 let formatPhoneNumber = (str) => {
   //Filter only numbers from the input

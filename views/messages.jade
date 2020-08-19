@@ -19,7 +19,7 @@ block content
             each msgroup in thread.messageGroups
                 if msgroup.showtime == true
                     div(class="datetime", data-datetime="#{msgroup.datetime}") #{msgroup.datetime}
-                div(class="#{msgroup.sender==you ? 'mine' : 'yours'} messages", data-datetime="#{msgroup.datetime}")
+                div(class="#{msgroup.sender==you ? 'mine' : 'yours'} messages contact_#{msgroup.sender}", data-datetime="#{msgroup.datetime}")
                     each msg in msgroup.messages
                         div(class="message #{msg.last ? 'last' : ''} tooltip", id="message_#{msg.id}")
                             each attachment in msg.attachments
@@ -27,5 +27,5 @@ block content
                             p #{msg.body}
                             span(class="tooltiptext") #{msg.datetime} &nbsp;
                                 a(href="http://txtifier.com/conversation/#{md5}#message_#{msg.id}") [link]
-                    div(class="#{msgroup.sender==you ? 'mine' : 'yours'} bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}
-                        span(class="#{msgroup.sender==you ? 'mine' : 'yours'} tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{helpers.formatPhoneNumber(msgroup.sender)}
+                    div(class="bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}", onclick="javascript:setMe(#{msgroup.sender})") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}
+                        span(class="tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{helpers.formatPhoneNumber(msgroup.sender)}

@@ -96,15 +96,20 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/add', function(req,res,next) {
-res.sendStatus(404);
-    return;
-  res.render('index', { title: 'Express' });
+    if ( !process.env.DEBUG ) {
+        res.sendStatus(404);
+        return;
+    }
+
+    res.render('index', { title: 'Express' });
 });
 
 router.post('/conversation/update_contact', function(req, res) {
 
-res.sendStatus(404);
-    return;
+    if ( !process.env.DEBUG ) {
+        res.sendStatus(404);
+        return;
+    }
 
 
     allSets = []
@@ -128,7 +133,25 @@ router.get('/conversation/:id', function(req, res) {
         pageData['data']['helpers'] = {
                 "formatPhoneNumber" : formatPhoneNumber,
                 "userAbbreviation" : userAbbreviation,
-            },
+        };
+
+        console.log(pageData['data']['contacts'])
+
+        // There's probably a way to output all the contents of the contacts, but :shrug:
+        var contactKeys = await storage.keys();
+        var contacts = {}
+        for (var i = 0; i < contactKeys.length; i++) {
+            var item = await storage.getItem(contactKeys[i])
+            if (typeof item === 'string' || item instanceof String) {
+                contacts[contactKeys[i]] = item
+            }
+        }
+
+        pageData['data']['contacts'] = contacts;
+        
+        console.log(pageData['data']['contacts'])
+
+        pageData['data']['you'] = '5038236773';
         response.render('messages', pageData['data']);
     }
 
@@ -309,24 +332,8 @@ router.post('/upload', (req, res, next) => {
         
         }
 
-        // There's probably a way to output all the contents of the contacts, but :shrug:
-        var contactKeys = await storage.keys();
-        var contacts = {}
-        for (var i = 0; i < contactKeys.length; i++) {
-            var item = await storage.getItem(contactKeys[i])
-            if (typeof item === 'string' || item instanceof String) {
-                contacts[contactKeys[i]] = item
-            }
-        }
-
         return {
             conversations:conversations,
-            contacts:contacts,
-            helpers: {
-                "formatPhoneNumber" : formatPhoneNumber,
-                "userAbbreviation" : userAbbreviation,
-            },
-            you:'5038236773'
         };
     }
     async function renderPage(response) {

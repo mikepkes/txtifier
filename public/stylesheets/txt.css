@@ -86,13 +86,13 @@ body {
   font-size:23px;
 }
 
-.yours.bubble {
+.yours .bubble {
   background-color: #eee;
   right: 70px;
   color: #DDDDDD;
 }
 
-.mine.bubble {
+.mine .bubble {
   background: #0085D1;
   background-attachment: fixed;
   left: 70px;

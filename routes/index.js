@@ -50,10 +50,22 @@ var dateTimeOptions = {
 var dateTimeFormatter = new Intl.DateTimeFormat([], dateTimeOptions);
 
 let formatDate = function (date) {
-    var dt = dateTimeFormatter.format(date);
+
+    var secondsOrig = Date.parse(date);
+    var seconds = Date.parse(date + "Z");
+    if (isNaN(seconds)) {
+        seconds = secondsOrig;
+    }
+        
+
+    var dt = dateTimeFormatter.format(seconds);
     if (dt == null) {
         dt = "";
     }
+    console.log("--")
+    console.log(date)
+    console.log(dt)
+    console.log("--")
     return dt;
 }
 

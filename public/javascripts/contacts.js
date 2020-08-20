@@ -3,7 +3,6 @@ const Http = new XMLHttpRequest();
 
 
 let setMe = function(me) {
-    console.log(me);
     var mes = document.getElementsByClassName("mine");
     while (mes.length|0) {
         mes[0].classList.add("yours")

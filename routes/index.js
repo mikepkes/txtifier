@@ -135,8 +135,6 @@ router.get('/conversation/:id', function(req, res) {
                 "userAbbreviation" : userAbbreviation,
         };
 
-        console.log(pageData['data']['contacts'])
-
         // There's probably a way to output all the contents of the contacts, but :shrug:
         var contactKeys = await storage.keys();
         var contacts = {}

@@ -28,4 +28,4 @@ block content
                             span(class="tooltiptext") #{msg.datetime} &nbsp;
                                 a(href="http://txtifier.com/conversation/#{md5}#message_#{msg.id}") [link]
                     div(class="bubble tooltip bubble_#{msgroup.sender}", data-user-abbr="#{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}", onclick="javascript:setMe(#{msgroup.sender})") #{helpers.userAbbreviation(contacts[msgroup.sender] ? contacts[msgroup.sender] : msgroup.sender)}
-                        span(class="tooltiptext tooltip_user_#{msgroup.sender}") #{msgroup.senderName} #{helpers.formatPhoneNumber(msgroup.sender)}
+                        span(class="tooltiptext tooltip_user_#{msgroup.sender}") #{contacts[msgroup.sender] ? contacts[msgroup.sender] : ""} #{helpers.formatPhoneNumber(msgroup.sender)}

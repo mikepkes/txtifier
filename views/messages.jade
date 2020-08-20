@@ -23,7 +23,12 @@ block content
                     each msg in msgroup.messages
                         div(class="message #{msg.last ? 'last' : ''} tooltip", id="message_#{msg.id}")
                             each attachment in msg.attachments
-                                div(class="fa fa-image")
+                                if attachment.endsWith("vcf")
+                                    a(href="#{attachment}")
+                                        div(class="fa fa-address-card")
+                                else
+                                    a(href="#{attachment}")
+                                        img(src="#{attachment}", class="attachment")
                             p #{msg.body}
                             span(class="tooltiptext") #{msg.datetime} &nbsp;
                                 a(href="http://txtifier.com/conversation/#{md5}#message_#{msg.id}") [link]

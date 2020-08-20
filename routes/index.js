@@ -3,8 +3,8 @@ const formidable = require('formidable');
 var router = express.Router();
 var xlsx = require('node-xlsx').default;
 var md5 = require('md5');
-const md5File = require('md5-file')
-
+const md5File = require('md5-file');
+const fs = require('fs');
 
 var minuteSplit = 5;
 
@@ -146,8 +146,6 @@ router.get('/conversation/:id', function(req, res) {
         }
 
         pageData['data']['contacts'] = contacts;
-        
-        console.log(pageData['data']['contacts'])
 
         pageData['data']['you'] = '5038236773';
         response.render('messages', pageData['data']);
@@ -191,6 +189,14 @@ router.post('/upload', (req, res, next) => {
     async function buildPage() {
 
     var conversations = {};
+
+    var messagesWithAttachments = {}
+
+    fs.readdir("public/attachments", function(err, items) {
+        for (var f=0; f<items.length; f++) {
+            messagesWithAttachments[items[f]] = true;
+        }
+    });
 
     name = workSheets[0]['name'];
     data = workSheets[0]['data'];
@@ -306,15 +312,28 @@ router.post('/upload', (req, res, next) => {
             conversations[tid]['messageGroups'][lastConv]['messages'][msgCount-1]['last'] = false;
         }
 
-
         var attachments = Array();
+        /*
         if (attachmentColumn > -1) {
             var ac = parseInt(data[i][attachmentColumn]);
 
             for(var m=0; m<ac; m++) {
                 // More data to come.
-                attachments.push({})
+                attachments.push({'id':data[i][messageIdColumn]})
             }
+        }
+        */
+        messageId = data[i][messageIdColumn];
+
+        console.log(messagesWithAttachments);
+        console.log(messageId);
+        if (messagesWithAttachments[messageId]) {
+            console.log(messageId);
+            fs.readdir("public/attachments/" + messageId + "/", function(err, items) {
+                for (var f=0; f<items.length; f++) {
+                    attachments.push("../attachments/" + messageId + "/" + items[f])
+                }
+            });
         }
 
         conversations[tid]['messageGroups'][lastConv]['messages'].push({
@@ -324,7 +343,7 @@ router.post('/upload', (req, res, next) => {
             'datetime' : formatDate(date),
             'body'   : body,
             'last'   : true,
-            'id'     : data[i][messageIdColumn],
+            'id'     : messageId,
             'attachments' : attachments
         });
         

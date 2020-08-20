@@ -213,4 +213,7 @@ body {
   visibility: visible;
 }
 
+.attachment {
+    max-width:300px
+}
 
